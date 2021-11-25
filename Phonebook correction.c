@@ -3,13 +3,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-// Advance p to the first non-whitespace character.
-// You can use isspace( ) from ctype.h. It's even better. 
-// A note about the word 'const'. It protects against accidentily overwriting
-// the memory that p points to. If the 'const' confuses you, you can remove 
-// all occurrences of it from the template and not use it in your code. 
-// If you understand how it works, it's better to use it. 
-
 char* skipwhitespace( char* p ){// WORKS
 	while ( isspace(*p) ) {
     	p++;
@@ -17,11 +10,7 @@ char* skipwhitespace( char* p ){// WORKS
   return p;
 }
 
-
-// Copy inp into data until either a (,) or the 0-character is
-// enountered. 
-
-char* readunquoteddata( char* inp, char* data ){// WORKS
+char* readunquoteddata( char* inp, char* data ){
 	int i = 0;
 	while ( *inp != ',' && *inp != 0 ) {
 		*(data+i) = *(inp++);
@@ -31,14 +20,7 @@ char* readunquoteddata( char* inp, char* data ){// WORKS
 	return inp;
 }
 
-
-// If the first non-space character is " 
-// we copy everything until the next " into str, but
-// remove the first and final quote. 
-// We never read beyond a 0-character. 
-// Skipping a possible (,) is not part of our job. 
-
-char* readquoteddata(char* inp, char* data) {// WORKS
+char* readquoteddata(char* inp, char* data) {
 	if ( !inp || *inp != '\"' ) abort( );
   else{
 	  int i;
@@ -55,7 +37,7 @@ char* readquoteddata(char* inp, char* data) {// WORKS
 }
 
 
-char* readdata( char* inp, char* data) {// WORKS
+char* readdata( char* inp, char* data) {
 	inp = skipwhitespace(inp);
   if (*(inp) == '\"'){
     inp = skipwhitespace(inp);
@@ -70,9 +52,7 @@ char* readdata( char* inp, char* data) {// WORKS
   return inp;
 }
 
-
-void correctfield(char *fld, char* corrected) { //works
-	// removes excess spaces/TABs
+void correctfield(char *fld, char* corrected) { 
 	fld = skipwhitespace( fld );
 	int j = 0;
 	for ( int i = 0; *(fld + i) != 0; i++ ) {
@@ -85,8 +65,6 @@ void correctfield(char *fld, char* corrected) { //works
     corrected[j] = 0;
 }
 
-
-// You are not obliged to use this function, but you can: 
 char USAcode( char c ){ //works
     if (c > '`' && c < 'p'){
         return 48 + ( 2 + (c - 97)/3 ); 
@@ -105,8 +83,6 @@ char USAcode( char c ){ //works
    }
    return c;
 }
-
-
 
 void correctPhoneNumber( char* number, char* corrected ) {
 	int i = 0, j = 1;
@@ -130,15 +106,6 @@ void correctPhoneNumber( char* number, char* corrected ) {
   *(corrected+j) = 0;
 }
 
-
-// Put your functions for task 2 here (make sure that you include tests 
-// in main( ) ). 
-
-
-// Determine the length of a file, by reading it once to the end
-// If the file does not exist, return -1 as length.
-// Don't forget to close the file.
-
 int countlines( char* fname ) { //WORKS
 	FILE* book = fopen(fname,"r");
   	if (book == NULL){
@@ -160,10 +127,6 @@ int countlines( char* fname ) { //WORKS
 }
 
 
-
-// I find the interface to fgets annoying, so we write this function.
-// We always assume that every line has 500 characters.
-
 int readline( FILE* f, char line[] ){ // WORKS
 	fgets(line,500,f);
  	if (line[strlen(line)-1] == '\n'){
@@ -184,9 +147,7 @@ typedef struct
 } PhoneEntry; 
 
 
-// Eto podarok:
-
-void initPhoneEntry( PhoneEntry* e ) //WORKS
+void initPhoneEntry( PhoneEntry* e ) 
 {
    e -> firstname[0] = 0;
    e -> secondname[0] = 0;
@@ -194,7 +155,7 @@ void initPhoneEntry( PhoneEntry* e ) //WORKS
    e -> phonenumber[0] = 0;
 }
 
-void printPhoneEntry( FILE* f, PhoneEntry* e ){ //WORKS
+void printPhoneEntry( FILE* f, PhoneEntry* e ){ 
   fprintf(f,"%-20s", e -> firstname);
   fprintf(f,"%-20s", e -> secondname);
   fprintf(f,"%-42s", e -> address);
@@ -232,8 +193,7 @@ void printPhoneBookCSV( FILE* f, PhoneEntry* start, int size ){
     }
 }
 
-char* readwithcutoff(char* inp, char* fld, int flen ){ //WORKS
-	// gets one data field with a limit of flen
+char* readwithcutoff(char* inp, char* fld, int flen ){ 
   	char data[500];
   	inp = readdata(inp,data);
   	inp = skipwhitespace( inp );
@@ -243,9 +203,7 @@ char* readwithcutoff(char* inp, char* fld, int flen ){ //WORKS
 }
 
 
-void parseEntry( PhoneEntry* e, char* inp ) //WORKS
-// reads one line of the phonebook.csv
-// and inserts the data into a phoneEntry
+void parseEntry( PhoneEntry* e, char* inp )
 {
   initPhoneEntry(e);
   inp = readwithcutoff(inp, e->firstname, 30);
@@ -253,7 +211,6 @@ void parseEntry( PhoneEntry* e, char* inp ) //WORKS
   inp = readwithcutoff(inp, e->address, 50);
   inp = readwithcutoff(inp, e->phonenumber, 30);
 }
-// Your code for Task 3 comes here: 
 
 void checkPhoneEntry( PhoneEntry* e, int linenr )
 {
@@ -296,73 +253,8 @@ void checkPhoneEntry( PhoneEntry* e, int linenr )
 
 
 int main( ){
-   printf( "CSCI 151, Assignment 3\n" );  // Don't change. 
-   printf( "Ilyas Kudaibergenov" );           // Replace by your Imya Familiya 
-   printf( "student ID = 202059098\n" );   // Your student number as string.
-   printf("------\n");
-   printf("TASK 1\n");
-   printf("------\n");
-
-   /////////////////////////////////////////////////////////
-   // Put your tests for your functions of Task 1 here: 
-    char test1[20] = "    xyz";
-    char *test = test1;
-      test = skipwhitespace(test);
-      printf("%s\n",test);
-      char test2[20] = "x    y      z";
-      test = test2;
-      char data[20];
-      test = readunquoteddata(test,data);
-      printf("%s\n",data);
-       char test3[20] = "\"x    y      z\"";
-      test = test3;
-      test = readquoteddata(test,data);
-      printf("%s\n",data);
-      char test4[20] = "\"x,y,z\"";
-      test = test4;
-      readdata( test, data );
-      printf("%s\n",data);
-      char test5[20] = "x    y      z";
-      test = test5;
-       correctfield(  test,  data );
-       printf("%s\n",data);
-       char test6[20] = "00345yk33";
-      test = test6;
-      correctPhoneNumber( test, data );
-      printf("%s\n",data);
-
-
-   printf("\n\n\n------\n");
-   printf("TASK 2\n");
-   printf("------\n");
-   ////////////////////////////////////////////////////////
-   // Put your tests for your functions of Task 2 here: 
-   FILE* text = fopen( "text.txt", "w" );
-   fprintf(text, "My cousin Ben bought his daughter a dog.\nHe is professional footballer\nAttack on Titan is the best anime ever.");
-   fclose(text);
-    FILE* text1 = fopen( "text.txt", "r" );
-    char fine[500];
-    char k = readline( text1, fine );
-    if (k == '\n'){
-        printf("Test has been passed successfully\n");
-    }
-    k = readline( text1, fine );
-     if (k == '\n'){
-        printf("Test has been passed successfully\n");
-    }
-    k = readline( text1, fine );
-     if (k == '\n'){
-        printf("Test has been passed successfully\n");
-    }
-    fclose(text1);
-    char fld[20];
-    char inp[30] = "Test for readwithcutoff";
-    readwithcutoff( inp, fld, 20);
-    printf("%s\n", fld);
-   // When you are finished testing, you can use the code below, by
-   // uncommenting it:
    
-   char bookname[] = "phoneobook.csv";  // When you submit, don't change this name!!
+   char bookname[] = "phoneobook.csv"; 
 
    int lines = countlines( bookname );
    printf( "number of lines = %d\n", lines );
@@ -373,7 +265,6 @@ int main( ){
       return -1;
    }
 
-   // Now we know how much to allocate, so let's do it: 
 
    PhoneEntry* thebook  = malloc( ( lines + 1 ) * sizeof( PhoneEntry ));
    int thebooksize = 0;
@@ -410,15 +301,6 @@ int main( ){
       
    }
 
-   
-
-
-   printf("\n\n\n------\n");
-   printf("TASK 3\n");
-   printf("------\n");
-   /////////////////////////////////////////////////////////////////
-   // Put your code for Task 3 here: 
-
    FILE* output = fopen("output.txt","w");
    FILE* outputcsv = fopen("output.csv","w");
    for (int i = 0; i < thebooksize; i++){
@@ -428,12 +310,7 @@ int main( ){
    printPhoneBookCSV(outputcsv, thebook,thebooksize);
    fclose(output);
   
-   // Don't forget to do this:
    free( thebook );
-
-
-   // DO NOT WRITE ANYTHING BELOW THIS LINE!
-   // DO NOT REMOVE OR CHANGE THIS LINE, IT IS USED FOR AUTOMATIC PROCESSING.
 
    return 0;
 }
