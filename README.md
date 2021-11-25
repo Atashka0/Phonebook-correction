@@ -1,0 +1,1 @@
+Phonebook is a .csv file, which has slightly shabby and unfinished look. The program removes all unnecessary characters and corrects the person's number in the book if it has letters or starts with 00. After that, it will print the book into another .csv file in a nice looking and sophisticated form.
